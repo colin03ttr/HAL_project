@@ -1,0 +1,3 @@
+cargo:rustc-link-search=C:\Users\ctswi\OneDrive - De Vinci\TRAVAIL\TRAVAIL\ESILV\A4\HW_Virtualization\Blink\blink\target\debug\build\stm32f4-6f08e9ed0f43ca1f\out
+cargo:rerun-if-changed=src/stm32f401/device.x
+cargo:rerun-if-changed=build.rs

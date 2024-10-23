@@ -1,0 +1,3 @@
+cargo:rustc-link-search=/mnt/c/Users/ctswi/OneDrive - De Vinci/TRAVAIL/TRAVAIL/ESILV/A4/HW_Virtualization/Blink/blink/target/debug/build/cortex-m-rt-916b84c5a9a668b2/out
+cargo:rerun-if-changed=build.rs
+cargo:rerun-if-changed=link.x.in
