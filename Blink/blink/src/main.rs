@@ -1,42 +1,37 @@
 #![no_std]
 #![no_main]
 
-use cortex_m_rt::entry;
-use core::panic::PanicInfo;
-
 mod gpio;
 mod usart;
 
+use cortex_m_rt::entry;
 use gpio::{Gpio, PinMode, PinValue};
-use usart::Usart;
-
-#[panic_handler]
-fn panic(_panic: &PanicInfo) -> ! {
-    loop {}
-}
+use usart::{Usart};
 
 #[entry]
 fn main() -> ! {
-    // Initialize GPIO for testing (optional)
     let gpio = Gpio::new();
+    let mut usart = usart::new_usart();
+
     gpio.configure_pin(5, PinMode::Output);
 
-    // Initialize USART
-    let usart = Usart::new();
-    usart.init(9600); // Set baud rate to 9600
-
-    // Transmit a test message
-    usart.transmit_string("USART Initialized!\r\n");
+    // Écriture d'un message dans le USART (simulation)
+    usart.write(b'H');
 
     loop {
-        // Blink an LED for visual confirmation
-        gpio.write_pin(5, PinValue::High);
-        for _ in 0..1_000_000 {}
-        gpio.write_pin(5, PinValue::Low);
-        for _ in 0..1_000_000 {}
-
-        // Echo back received data
-        let received = usart.receive();
-        usart.transmit(received);
+        if let Some(command) = usart.read() {
+            match command {
+                b'H' => gpio.write_pin(5, PinValue::High),
+                b'L' => gpio.write_pin(5, PinValue::Low),
+                _ => (),
+            }
+        }
     }
+}
+
+use core::panic::PanicInfo;
+
+#[panic_handler]
+fn panic(_info: &PanicInfo) -> ! {
+    loop {}
 }

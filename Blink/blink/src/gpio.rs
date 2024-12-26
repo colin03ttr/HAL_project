@@ -25,14 +25,11 @@ impl Gpio {
             ddr: DDRB,
             port: PORTB,
             pin: PINB,
-            max_pins: 8, // Atmega328p port B has 8 pins (0-7)
+            max_pins: 8,
         }
     }
 
     pub fn configure_pin(&self, pin: u8, mode: PinMode) {
-        if pin >= self.max_pins {
-            panic!("Invalid pin number: {}", pin);
-        }
         unsafe {
             match mode {
                 PinMode::Input => core::ptr::write_volatile(
@@ -48,9 +45,6 @@ impl Gpio {
     }
 
     pub fn write_pin(&self, pin: u8, value: PinValue) {
-        if pin >= self.max_pins {
-            panic!("Invalid pin number: {}", pin);
-        }
         unsafe {
             match value {
                 PinValue::High => core::ptr::write_volatile(
@@ -61,19 +55,6 @@ impl Gpio {
                     self.port,
                     core::ptr::read_volatile(self.port) & !(1 << pin),
                 ),
-            }
-        }
-    }
-
-    pub fn read_pin(&self, pin: u8) -> PinValue {
-        if pin >= self.max_pins {
-            panic!("Invalid pin number: {}", pin);
-        }
-        unsafe {
-            if core::ptr::read_volatile(self.pin) & (1 << pin) != 0 {
-                PinValue::High
-            } else {
-                PinValue::Low
             }
         }
     }

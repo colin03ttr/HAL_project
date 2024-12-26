@@ -6,5 +6,12 @@ edition = "2021"
 [dependencies]
 cortex-m-rt = "0.7"
 
+[profile.dev]
+panic = "abort"
+
 [profile.release]
 panic = "abort"
+
+[features]
+atmega328p = []
+cortex_m7 = []
